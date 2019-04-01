@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="website.liujie.dao.BloCategoryDao" >
+    <resultMap id="BaseResultMap" type="website.liujie.entity.BloCategory" >
+        <id column="CATEID" property="id"/>
+        <result column="NAME" property="name"/>
+        <result column="USERID" property="userid"/>
+        <result column="NUM" property="num"/>
+    </resultMap>
+    <sql id="Base_Column_List" >
+        CATEID, NAME, USERID
+    </sql>
+    <select id="queryById" resultMap="BaseResultMap" parameterType="java.io.Serializable" >
+        select
+        <include refid="Base_Column_List" />
+        from blo_category
+        where CATEID = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="query" resultMap="BaseResultMap" parameterType="website.liujie.entity.BloCategory" >
+        select
+        <include refid="Base_Column_List" />
+        from blo_category
+        <include refid="baseWhere"/>
+    </select>
+    <select id="getByUserid" parameterType="java.io.Serializable" resultMap="BaseResultMap">
+        SELECT t1.*,count(t2.id) as NUM FROM blo_category t1
+        left join blog t2 on t1.cateid=t2.category
+        WHERE userid=#{userid}
+        GROUP by t1.cateid
+        ORDER BY cateid DESC
+    </select>
+    <delete id="deleteById" parameterType="java.io.Serializable" >
+        delete from blo_category
+        where CATEID = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="add" parameterType="website.liujie.entity.BloCategory" >
+        <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into blo_category
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                CATEID,
+            </if>
+            <if test="name != null" >
+                NAME,
+            </if>
+            <if test="userid != null" >
+                USERID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="userid != null" >
+                #{userid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="website.liujie.entity.BloCategory" >
+        update blo_category
+        <set >
+            <if test="name != null" >
+                NAME = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="userid != null" >
+                USERID = #{userid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where CATEID = #{id,jdbcType=INTEGER}
+    </update>
+
+    <sql id="baseWhere">
+        <where>
+            <if test="id != null" >
+                AND cateid=#{id,jdbcType=INTEGER}
+            </if>
+            <if test="name != null" >
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="userid != null" >
+                AND userid=#{userid,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+</mapper>

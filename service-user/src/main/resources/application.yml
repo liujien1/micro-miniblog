@@ -1,0 +1,28 @@
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:12000/eureka/
+server:
+  port: 12004
+spring:
+  application:
+    name: service-user
+  datasource:
+    url: jdbc:mysql://192.168.30.108:3306/miniblog?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456
+  redis:
+    port: 6379
+    timeout: 60
+    jedis:
+      pool:
+        max-active: 1024
+        max-idle: 200
+        max-wait: 1000
+        min-idle: 0
+    host: 127.0.0.1
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: website.liujie.dao

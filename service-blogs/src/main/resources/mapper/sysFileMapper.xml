@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="website.liujie.dao.SysFileDao" >
+    <resultMap id="BaseResultMap" type="website.liujie.entity.SysFile" >
+        <id column="fid" property="id"/>
+        <result column="path" property="path" />
+        <result column="fullpath" property="fullpath" />
+        <result column="size" property="size" />
+        <result column="type" property="type" />
+        <result column="createuser" property="createuser"  />
+        <result column="createtime" property="createtime"  />
+        <result column="pid" property="pid"  />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        path,fullpath,size,type,createuser,createtime
+    </sql>
+    <select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from sys_file
+        where fid = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="query" resultMap="BaseResultMap" parameterType="website.liujie.entity.SysFile" >
+        select
+        <include refid="Base_Column_List" />
+        from sys_file
+        where 1=1
+        <include refid="baseWhere"/>
+    </select>
+
+    <select id="queryForList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_file
+        where 1=1
+        <include refid="baseWhere"/>
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Integer" >
+        delete from sys_file
+        where fid = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="delete" parameterType="website.liujie.entity.SysFile">
+        delete from sys_file
+        where 1=1
+        <include refid="baseWhere"/>
+    </delete>
+    <insert id="add" parameterType="website.liujie.entity.SysFile" >
+        <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER" >
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        insert into sys_file
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                fid,
+            </if>
+            <if test="path != null" >
+                path,
+            </if>
+            <if test="fullpath != null" >
+                fullpath,
+            </if>
+            <if test="size != null" >
+                size,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="createuser != null" >
+                createuser,
+            </if>
+            <if test="createtime != null" >
+                createtime,
+            </if>
+            <if test="pid != null" >
+                pid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{fid,jdbcType=INTEGER},
+            </if>
+            <if test="path != null" >
+                #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="fullpath != null" >
+                #{fullpath,jdbcType=VARCHAR},
+            </if>
+            <if test="size != null" >
+                #{size,jdbcType=INTEGER},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="createuser != null" >
+                #{createuser,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null" >
+                #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="pid != null" >
+                #{pid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="website.liujie.entity.SysFile" >
+        update sys_file
+        <set >
+            <if test="path != null" >
+                path = #{path,jdbcType=VARCHAR},
+            </if>
+            <if test="fullpath != null" >
+                fullpath = #{fullpath,jdbcType=VARCHAR},
+            </if>
+            <if test="size != null" >
+                size = #{size,jdbcType=INTEGER},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="createuser != null" >
+                createuser = #{createuser,jdbcType=INTEGER},
+            </if>
+            <if test="createtime != null" >
+                createtime = #{createtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="pid != null" >
+                pid = #{pid,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateOfPid">
+      update sys_file set pid=#{pid} where fid in ${filesidCondition}
+    </update>
+
+    <sql id="baseWhere">
+        <if test="path != null" >
+            AND path = #{path,jdbcType=VARCHAR}
+        </if>
+        <if test="fullpath != null" >
+            AND fullpath = #{fullpath,jdbcType=VARCHAR}
+        </if>
+        <if test="size != null" >
+            AND size = #{size,jdbcType=INTEGER}
+        </if>
+        <if test="type != null" >
+            AND type = #{type,jdbcType=INTEGER}
+        </if>
+        <if test="createuser != null" >
+            AND createuser = #{createuser,jdbcType=INTEGER}
+        </if>
+        <if test="createtime != null" >
+            AND createtime = #{createtime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="pid != null" >
+            AND pid = #{pid,jdbcType=INTEGER}
+        </if>
+    </sql>
+</mapper>

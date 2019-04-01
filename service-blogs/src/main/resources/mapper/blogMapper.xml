@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="website.liujie.dao.BlogDao">
+
+    <resultMap id="BaseResultMap" type="website.liujie.entity.Blog">
+        <id column="id" property="id"/>
+        <result column="birth" property="birth"/>
+        <result column="title" property="title"/>
+        <result column="author" property="author"/>
+        <result column="preview" property="preview"/>
+        <result column="text" property="text"/>
+        <result column="category" property="category"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <result column="birthUrl" property="birthUrl"/>
+        <result column="readCount" property="readCount"/>
+        <result column="authorId" property="authorId"/>
+        <result column="ishidden" property="ishidden"/>
+        <result column="editorType" property="editorType"/>
+        <result column="categoryName" property="categoryName"/>
+    </resultMap>
+
+    <insert id="add" parameterType="website.liujie.entity.Blog">
+        <selectKey resultType="java.lang.String" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID() AS id
+        </selectKey>
+        INSERT blog (birth, title, author, preview, text, category, createTime,updateTime, birthUrl, readCount,
+        authorId,ishidden,editorType)
+        VALUES(#{birth}, #{title}, #{author}, #{preview}, #{text}, #{category}, #{createTime}, #{updateTime},
+        #{birthUrl}, #{readCount}, #{authorId},#{ishidden},#{editorType})
+    </insert>
+
+    <update id="update" parameterType="website.liujie.entity.Blog">
+        UPDATE blog
+        <set>
+            <if test="birth !=null">
+                birth=#{birth},
+            </if>
+            <if test="title !=null">
+                title=#{title},
+            </if>
+            <if test="author !=null">
+                author=#{author},
+            </if>
+            <if test="preview !=null">
+                preview=#{preview},
+            </if>
+            <if test="text !=null">
+                text=#{text},
+            </if>
+            <if test="category !=null">
+                category=#{category},
+            </if>
+            <if test="createTime !=null">
+                createTime=#{createTime},
+            </if>
+            <if test="updateTime !=null">
+                updateTime=#{updateTime},
+            </if>
+            <if test="birthUrl !=null">
+                birthUrl=#{birthUrl},
+            </if>
+            <if test="readCount !=null">
+                readCount=#{readCount},
+            </if>
+            <if test="authorId !=null">
+                authorId=#{authorId},
+            </if>
+            <if test="ishidden !=null">
+                ishidden=#{ishidden},
+            </if>
+            <if test="editorType !=null">
+                editorType=#{editorType},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <update id="updateReadCount">
+        UPDATE blog SET readcount=#{readCount} where id=#{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.io.Serializable">
+        delete from blog
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteByFilePath" parameterType="java.lang.String">
+       delete from blog
+        where birthUrl = #{birthUrl}
+    </delete>
+
+    <update id="updateByFilePath" parameterType="website.liujie.entity.Blog">
+        UPDATE blog
+        <set>
+            <if test="title !=null">
+                title=#{title},
+            </if>
+            <if test="author !=null">
+                author=#{author},
+            </if>
+            <if test="preview !=null">
+                preview=#{preview},
+            </if>
+            <if test="text !=null">
+                text=#{text},
+            </if>
+            <if test="updateTime !=null">
+                updateTime=#{updateTime},
+            </if>
+        </set>
+        where birthUrl=#{birthUrl}
+    </update>
+
+    <select id="queryById" parameterType="java.io.Serializable" resultMap="BaseResultMap">
+        SELECT t1.*,t2.NAME as categoryName FROM blog t1
+        left join blo_category t2 on t1.category=t2.cateid
+        WHERE id=#{id}
+    </select>
+
+    <select id="getByUserid" parameterType="java.io.Serializable" resultType="website.liujie.entity.Blog">
+        SELECT * FROM blog WHERE authorId=#{authorId} ORDER BY id DESC
+    </select>
+    <select id="getBySearchTitle" parameterType="String" resultType="website.liujie.entity.Blog">
+        SELECT * FROM blog WHERE title LIKE #{title} ORDER BY id DESC
+    </select>
+    <select id="queryForList" resultType="website.liujie.entity.Blog">
+        SELECT * FROM blog where 1=1
+        <include refid="baseWhere"/>
+
+        <if test="extendSortCol ==null">
+            ORDER BY id DESC
+        </if>
+        <if test="extendSortCol !=null">
+            ORDER BY ${extendSortCol} DESC
+        </if>
+        <if test="extendSize !=null">
+            limit 0,#{extendSize}
+        </if>
+    </select>
+
+    <select id="queryForPageCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM blog where 1=1
+        <include refid="basePageWhere"/>
+        <if test="po.extendSearch !=null">
+            AND (TITLE LIKE CONCAT('%','${po.extendSearch}','%' )
+            OR text LIKE CONCAT('%','${po.extendSearch}','%' ))
+        </if>
+        <if test="po.extendIslogin !=null">
+            AND (ishidden=0 OR AUTHORID=#{po.authorId})
+        </if>
+        <if test="po.extendTimeStr !=null &amp;&amp; po.extendOpreate!=null">
+            <if test="po.extendOpreate=='-1'"><!--刷新-->
+                AND updateTime > #{po.extendTimeStr}
+            </if>
+            <if test="po.extendOpreate!='-1'"><!--加载-->
+                AND updateTime &lt; #{po.extendTimeStr}
+            </if>
+        </if>
+    </select>
+
+    <select id="queryForPage" resultMap="BaseResultMap">
+
+        SELECT * FROM blog where 1=1
+        <include refid="basePageWhere"/>
+        <if test="po.extendSearch !=null">
+            AND (TITLE LIKE CONCAT('%','${po.extendSearch}','%' )
+            OR text LIKE CONCAT('%','${po.extendSearch}','%' ))
+        </if>
+        <if test="po.extendIslogin !=null">
+            AND (ishidden=0 OR AUTHORID=#{po.authorId})
+        </if>
+        <if test="po.extendTimeStr !=null &amp;&amp; po.extendOpreate!=null">
+            <if test="po.extendOpreate=='-1'"><!--刷新-->
+                AND updateTime > #{po.extendTimeStr}
+            </if>
+            <if test="po.extendOpreate!='-1'"><!--加载-->
+                AND updateTime &lt; #{po.extendTimeStr}
+            </if>
+        </if>
+        ORDER BY updateTime DESC
+        ${page.limitStr}
+    </select>
+
+    <insert id="saveOrUpdate">
+
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            select count(*) from blog where title = #{title}
+        </selectKey>
+        <if test="count > 0">
+            update blog
+            set text = #{text} ,updateTime= #{updateTime}
+            where title = #{title} and updateTime <![CDATA[<]]> #{updateTime}
+        </if>
+        <if test="count==0">
+            INSERT blog (birth, title, author, preview, text, category, createTime, birthUrl, readCount,
+            authorId,ishidden,editorType)
+            VALUES(#{birth}, #{title}, #{author}, #{preview}, #{text}, #{category}, #{createTime}, #{birthUrl},
+            #{readCount}, #{authorId},#{ishidden},#{editorType})
+        </if>
+    </insert>
+
+    <sql id="baseWhere">
+        <if test="id !=null">
+            AND ID=#{id}
+        </if>
+
+        <if test="birth !=null">
+            AND BIRTH=#{birth}
+        </if>
+
+        <if test="title !=null">
+            AND TITLE LIKE CONCAT('%','${title}','%' )
+        </if>
+
+        <if test="author !=null">
+            AND AUTHOR=#{author}
+        </if>
+
+        <if test="preview !=null">
+            AND PREVIEW LIKE CONCAT('%','${preview}','%' )
+        </if>
+
+        <if test="text !=null">
+            AND TEXT LIKE CONCAT('%','${text}','%' )
+        </if>
+
+        <if test="category !=null">
+            AND CATEGORY=#{category}
+        </if>
+
+        <if test="createTime !=null">
+            AND CREATETIME=#{createTime}
+        </if>
+        <if test="updateTime !=null">
+            AND UPDATETIME=#{updateTime}
+        </if>
+
+        <if test="birthUrl !=null">
+            AND BIRTHURL=#{birthUrl}
+        </if>
+
+        <if test="readCount !=null">
+            AND READCOUNT=#{readCount}
+        </if>
+
+        <if test="authorId !=null">
+            AND AUTHORID=#{authorId}
+        </if>
+
+        <if test="ishidden !=null">
+            AND ishidden=#{ishidden}
+        </if>
+
+        <if test="editorType !=null">
+            AND editorType=#{editorType}
+        </if>
+
+    </sql>
+
+    <sql id="basePageWhere">
+        <if test="po.id !=null">
+            AND ID=#{po.id}
+        </if>
+
+        <if test="po.birth !=null">
+            AND BIRTH=#{po.birth}
+        </if>
+
+        <if test="po.title !=null">
+            AND TITLE=#{po.title}
+        </if>
+
+        <if test="po.author !=null">
+            AND AUTHOR=#{po.author}
+        </if>
+
+        <if test="po.preview !=null">
+            AND PREVIEW=#{po.preview}
+        </if>
+
+        <if test="po.text !=null">
+            AND TEXT=#{po.text}
+        </if>
+
+        <if test="po.category !=null">
+            AND CATEGORY=#{po.category}
+        </if>
+
+        <if test="po.createTime !=null">
+            AND DATE=#{po.createTime}
+        </if>
+        <if test="po.updateTime !=null">
+            AND DATE=#{po.updateTime}
+        </if>
+
+        <if test="po.birthUrl !=null">
+            AND BIRTHURL=#{po.birthUrl}
+        </if>
+
+        <if test="po.readCount !=null">
+            AND READCOUNT=#{po.readCount}
+        </if>
+
+        <if test="po.authorId !=null">
+            AND AUTHORID=#{po.authorId}
+        </if>
+
+        <if test="po.ishidden !=null">
+            AND ISHIDDEN=#{po.ishidden}
+        </if>
+
+        <if test="po.editorType !=null">
+            AND editorType=#{po.editorType}
+        </if>
+    </sql>
+</mapper>
