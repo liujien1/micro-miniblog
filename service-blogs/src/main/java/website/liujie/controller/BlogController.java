@@ -59,17 +59,22 @@ public class BlogController extends BaseController {
 
         String token= CookieUtil.getCookieValue(request,"token");
 
-        User user= (User) redisUtil.getObject(token);
         Blog blog = blogService.queryById(p);
-        if(null==user){
-            if(blog.getIshidden().equals(1)){
+        if(token==null && blog.getIshidden().equals(1)) {
+            return "";
+        }
+        if(token!=null) {
+            User user = (User) redisUtil.getObject(token);
+
+            if (null == user && blog.getIshidden().equals(1)) {
                 return "";
             }
-        }else{
-            if(blog.getIshidden().equals(1) && blog.getAuthorId().equals(user.getId())){
+            if (blog.getIshidden().equals(1) && !String.valueOf(blog.getAuthorId()).equals(user.getId())) {
                 return "";
             }
         }
+
+
         blogService.updateReadCount(Integer.parseInt(blog.getId()), blog.getReadCount() + 1);
         return blog.getText();
     }
