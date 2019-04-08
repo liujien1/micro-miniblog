@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @Description :请求拦截器
  * @Copyright : Excenon. ALL Rights Reserved
- * @Company : 深圳市华磊移动设备科技有限公司
+ * @Company : jie
  * @Author : liujie
  * @Version : 1.0
  * @Date : 2016/9/27 0027

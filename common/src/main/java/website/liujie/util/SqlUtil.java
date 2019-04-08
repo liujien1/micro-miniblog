@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * @Description :数据库处理工具类
  * @Copyright : Excenon. ALL Rights Reserved
- * @Company : 深圳市华磊移动设备科技有限公司
+ * @Company : jie
  * @Author : liujie
  * @Version : 1.0
  * @Date : 2016/4/19 0019

@@ -32,7 +32,7 @@ import java.util.Map;
  * 需要与AnnotationMethodHandlerAdapter使用同一个messageConverters<br> 
  * Controller中需要有专门处理异常的方法。 
  * @Copyright	: Excenon. ALL Rights Reserved
- * @Company		: 深圳市华磊移动设备科技有限公司 
+ * @Company		: jie 
  * @author		: Cosmo
  * @version		: 1.0
  * @Date		: 2015年11月28日 上午10:44:11

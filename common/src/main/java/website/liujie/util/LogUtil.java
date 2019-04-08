@@ -7,7 +7,7 @@ import org.apache.log4j.Priority;
 /**
  * @Description	: 
  * @Copyright	: Excenon. ALL Rights Reserved
- * @Company		: 深圳市华磊移动设备科技有限公司 
+ * @Company		: jie 
  * @author		: Cosmo
  * @version		: 1.0
  * @Date		: 2015年11月27日 下午7:59:04

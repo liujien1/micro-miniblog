@@ -10,7 +10,7 @@ spring:
     name: service-user
   datasource:
     url: jdbc:mysql://192.168.30.108:3306/miniblog?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
   redis:

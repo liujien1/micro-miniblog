@@ -1,11 +1,9 @@
 package website.liujie.common;
 
-import website.liujie.util.PropertyUtils;
-
 /**
  * @Description	: 系统常量
  * @Copyright	: Excenon. ALL Rights Reserved
- * @Company		: 深圳市华磊移动设备科技有限公司 
+ * @Company		: jie 
  * @author		: Cosmo
  * @version		: 1.0
  * @Date		: 2015年11月27日 下午7:56:26
@@ -67,15 +65,8 @@ public final class SystemConstant {
 	//git仓库地址
 	public static final String blogsFolderPath="BLOGSFOLDERPATH";
 
-
-
 	/**
 	 * 系统DES密钥相关常量
 	 */
-	public static final String DES_KEY_DEFAULT = getKey();
-
-	public static final String getKey() {
-		String desKey= PropertyUtils.get("DESKEY");
-		return desKey;
-	}
+	public static final String DES_KEY_DEFAULT = "liu123aabbcc";
 }

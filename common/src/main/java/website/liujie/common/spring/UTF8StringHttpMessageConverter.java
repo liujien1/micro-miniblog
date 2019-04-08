@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @Description	: 解决spring3.1与jquery返回json编码问题
  * @Copyright	: Excenon. ALL Rights Reserved
- * @Company		: 深圳市华磊移动设备科技有限公司 
+ * @Company		: jie 
  * @author		: Cosmo
  * @version		: 1.0
  * @Date		: 2015年11月27日 下午8:07:36
@@ -52,8 +52,8 @@ public class UTF8StringHttpMessageConverter extends
 			HttpInputMessage inputMessage) throws IOException,
 			HttpMessageNotReadableException {
 		MediaType contentType = inputMessage.getHeaders().getContentType();
-		Charset charset = contentType.getCharSet() != null ? contentType
-				.getCharSet() : DEFAULT_CHARSET;
+		Charset charset = contentType.getCharset() != null ? contentType
+				.getCharset() : DEFAULT_CHARSET;
 				
 		return FileCopyUtils.copyToString(new InputStreamReader(inputMessage
 				.getBody(), charset));
@@ -63,8 +63,8 @@ public class UTF8StringHttpMessageConverter extends
 	protected void writeInternal(String t, HttpOutputMessage outputMessage)
 			throws IOException, HttpMessageNotWritableException {
 		MediaType contentType = outputMessage.getHeaders().getContentType();
-		Charset charset = contentType.getCharSet() != null ? contentType
-				.getCharSet() : DEFAULT_CHARSET;
+		Charset charset = contentType.getCharset() != null ? contentType
+				.getCharset() : DEFAULT_CHARSET;
 				
 		logger.info("-----------");
 		logger.info("返回数据："+t);
@@ -78,8 +78,8 @@ public class UTF8StringHttpMessageConverter extends
 
 	@Override
 	protected Long getContentLength(String s, MediaType contentType) {
-		if (contentType != null && contentType.getCharSet() != null) {
-			Charset charset = contentType.getCharSet();
+		if (contentType != null && contentType.getCharset() != null) {
+			Charset charset = contentType.getCharset();
 			try {
 				return (long) s.getBytes(charset.name()).length;
 			} catch (UnsupportedEncodingException ex) {

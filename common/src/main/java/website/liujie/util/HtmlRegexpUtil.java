@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * @Description :包括过滤HTML标记，转换HTML标记，替换特定HTML标记
  * @Copyright : Excenon. ALL Rights Reserved
- * @Company : 深圳市华磊移动设备科技有限公司
+ * @Company : jie
  * @Author : liujie
  * @Version : 1.0
  * @Date : 2016/9/27 0027

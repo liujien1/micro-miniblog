@@ -21,6 +21,7 @@ import website.liujie.util.jedis.RedisUtil;
  * <util:constant static-field="org.springframework.session.data.redis.config.ConfigureRedisAction.NO_OP"/>
  * @return
  */
+
 /**
  * @author 刘杰
  * @date 2018-12-28
@@ -59,8 +60,8 @@ public class JedisConfig extends CachingConfigurerSupport {
     public JedisPool redisPoolFactory(){
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         jedisPoolConfig.setMaxIdle(maxIdle);
-        jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
-        jedisPoolConfig.setMaxTotal(maxActive);
+        jedisPoolConfig.setMaxWait(maxWaitMillis);
+        jedisPoolConfig.setMaxActive(maxActive);
         jedisPoolConfig.setMinIdle(minIdle);
         JedisPool jedisPool = new JedisPool(jedisPoolConfig,host,port,timeout,null);
 
